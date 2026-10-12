@@ -1,0 +1,23 @@
+name: Build RTPMenu
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip -o RTPMenu-project.zip
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: RTPMenu/pom.xml
+      - run: mvn --batch-mode clean package
+        working-directory: RTPMenu
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RTPMenu
+          path: RTPMenu/target/rtpmenu-1.0.0.jar
